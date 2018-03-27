@@ -7,9 +7,10 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/book_cover_image"
-        android:layout_width="30dp"
-        android:layout_height="45dp"
+        android:id="@+id/book_thumbnail"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:layout_gravity="center_vertical"
         android:background="@color/colorPrimary" />
 

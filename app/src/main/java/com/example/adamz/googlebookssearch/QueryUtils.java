@@ -66,7 +66,13 @@ public class QueryUtils {
                 // authors
                 String publishedDate = volumeInfo.getString("publishedDate");
 
-                books.add(new Book(title, authors, publisher, publishedDate));
+                String url = volumeInfo.getString("canonicalVolumeLink");
+
+                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+
+                String thumbnailUrl = imageLinks.getString("smallThumbnail"); //osetrit
+
+                books.add(new Book(title, authors, publisher, publishedDate, thumbnailUrl, url));
             }
 
         } catch (JSONException e) {

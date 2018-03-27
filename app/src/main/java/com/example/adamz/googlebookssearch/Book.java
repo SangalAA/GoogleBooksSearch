@@ -11,20 +11,16 @@ public class Book {
     private List<String> mAuthors;
     private String mPublisher;
     private String mPublishedDate;
+    private String mThumbnailUrl;
     private String mUrl;
-    private String mCoverImageUrl;
 
-    public Book(String mTitle, List<String> mAuthors, String mPublisher, String mPublishedDate) {
+    public Book(String mTitle, List<String> mAuthors, String mPublisher, String mPublishedDate, String mThumbnailUrl, String mUrl) {
         this.mTitle = mTitle;
         this.mAuthors = mAuthors;
         this.mPublisher = mPublisher;
         this.mPublishedDate = mPublishedDate;
-    }
-
-    public Book(String mTitle, String mPublisher, String mPublishedDate) {
-        this.mTitle = mTitle;
-        this.mPublisher = mPublisher;
-        this.mPublishedDate = mPublishedDate;
+        this.mThumbnailUrl = mThumbnailUrl;
+        this.mUrl = mUrl;
     }
 
     public String getTitle() {
@@ -41,5 +37,13 @@ public class Book {
 
     public String getPublishedDate() {
         return mPublishedDate;
+    }
+
+    public String getUrl() {
+        return mUrl;
+    }
+
+    public String getThumbnailUrl() {
+        return mThumbnailUrl;
     }
 }
