@@ -32,22 +32,42 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Book currentBook = getItem(position);
 
         TextView publisherTextView = (TextView) bookListView.findViewById(R.id.publisher_text_view);
-        publisherTextView.setText(currentBook.getPublisher());
+        String publisher = currentBook.getPublisher();
+
+        if (publisher.equals("")) {
+            publisher = getContext().getResources().getString(R.string.no_publisher);
+        }
+        publisherTextView.setText(publisher);
 
         TextView titleTextView = (TextView) bookListView.findViewById(R.id.title_text_view);
         titleTextView.setText(currentBook.getTitle());
-/*
+
         TextView authorsTextView = (TextView) bookListView.findViewById(R.id.authors_text_view);
         // Arraylist?
-        String[] authors = currentBook.getAuthors();
+        List<String> authors = currentBook.getAuthors();
+        if (authors.isEmpty()) {
+            authorsTextView.setText(R.string.no_authors);
+        } else {
+            authorsTextView.setText(formatAuthors(authors));
+        }
 
-        //naformatovat autorov
-        authorsTextView.setText("Author");//formatAuthors
-*/
+
         TextView dateTextView = (TextView) bookListView.findViewById(R.id.date_text_view);
         dateTextView.setText(currentBook.getPublishedDate());
 
 
         return bookListView;
+    }
+
+    private static String formatAuthors(List<String> authors) {
+        StringBuilder output = new StringBuilder();
+        if (authors.isEmpty()) {
+            return output.toString();
+        }
+        for (String author : authors) {
+            output.append(author);
+            output.append(",");
+        }
+        return output.toString();
     }
 }

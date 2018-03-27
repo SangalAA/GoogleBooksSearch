@@ -41,7 +41,7 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected List<Book> doInBackground(Void... voids) {
-            List<Book> result = QueryUtils.fetchBookData(searchQuery, 15);
+            List<Book> result = QueryUtils.fetchBookData(searchQuery, 30);
             return result;
         }
 

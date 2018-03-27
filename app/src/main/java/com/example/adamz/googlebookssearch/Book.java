@@ -1,24 +1,26 @@
 package com.example.adamz.googlebookssearch;
 
+import java.util.List;
+
 /**
  * Created by adamz on 26.3.2018.
  */
 
 public class Book {
     private String mTitle;
-    private String[] mAuthors;
+    private List<String> mAuthors;
     private String mPublisher;
     private String mPublishedDate;
     private String mUrl;
     private String mCoverImageUrl;
-/*
-    public Book(String mTitle, String[] mAuthors, String mPublisher, int mPublishedDate) {
+
+    public Book(String mTitle, List<String> mAuthors, String mPublisher, String mPublishedDate) {
         this.mTitle = mTitle;
         this.mAuthors = mAuthors;
         this.mPublisher = mPublisher;
         this.mPublishedDate = mPublishedDate;
     }
-*/
+
     public Book(String mTitle, String mPublisher, String mPublishedDate) {
         this.mTitle = mTitle;
         this.mPublisher = mPublisher;
@@ -29,7 +31,7 @@ public class Book {
         return mTitle;
     }
 
-    public String[] getAuthors() {
+    public List<String> getAuthors() {
         return mAuthors;
     }
 

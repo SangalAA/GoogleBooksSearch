@@ -55,10 +55,18 @@ public class QueryUtils {
                     publisher = volumeInfo.getString("publisher");
                 }
 
+                List<String> authors = new ArrayList<>();
+                if (volumeInfo.has("authors")) {
+                    JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+                    for (int j = 0; j < authorsArray.length(); j++) {
+                        authors.add(authorsArray.getString(j));
+                    }
+                }
+
                 // authors
                 String publishedDate = volumeInfo.getString("publishedDate");
 
-                books.add(new Book(title, publisher, publishedDate));
+                books.add(new Book(title, authors, publisher, publishedDate));
             }
 
         } catch (JSONException e) {
