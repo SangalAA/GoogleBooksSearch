@@ -43,7 +43,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         titleTextView.setText(currentBook.getTitle());
 
         TextView authorsTextView = (TextView) bookListView.findViewById(R.id.authors_text_view);
-        // Arraylist?
+
         List<String> authors = currentBook.getAuthors();
         if (authors.isEmpty()) {
             authorsTextView.setText(R.string.no_authors);
