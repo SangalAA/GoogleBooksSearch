@@ -2,15 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="88dp"
+    android:layout_height="72dp"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingStart="16dp">
 
     <ImageView
         android:id="@+id/book_thumbnail"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:layout_width="40dp"
+        android:layout_height="55dp"
+        android:scaleType="fitCenter"
         android:layout_gravity="center_vertical"
         android:background="@color/colorPrimary" />
 
@@ -20,7 +23,8 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingStart="32dp">
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp">
 
         <TextView
             android:id="@+id/title_text_view"
@@ -31,7 +35,7 @@
             android:maxLines="1"
             android:textSize="16sp"
             tools:text="BOOK TITLE" />
-
+<!--
         <TextView
             android:id="@+id/publisher_text_view"
             android:layout_width="wrap_content"
@@ -41,12 +45,13 @@
             android:maxLines="1"
             android:textSize="14sp"
             tools:text="Publisher" />
-
+-->
         <TextView
             android:id="@+id/authors_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
+            android:fontFamily="sans-serif-regular"
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="Authors" />
@@ -56,7 +61,10 @@
         android:id="@+id/date_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center_vertical"
+        android:textSize="14sp"
         tools:text="2018" />
 
 </LinearLayout>

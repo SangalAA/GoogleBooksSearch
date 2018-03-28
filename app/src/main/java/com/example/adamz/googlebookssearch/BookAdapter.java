@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -41,14 +43,17 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Book currentBook = getItem(position);
 
         // ImageView
-
+        ImageView thumbnailImageView = (ImageView) bookListView.findViewById(R.id.book_thumbnail);
+        // Using Glide library to lazy load thumbnail images
+        Glide.with(getContext()).load(currentBook.getThumbnailUrl()).into(thumbnailImageView);
+/*
         TextView publisherTextView = (TextView) bookListView.findViewById(R.id.publisher_text_view);
         String publisher = currentBook.getPublisher();
         if (publisher.equals("")) {
             publisher = getContext().getResources().getString(R.string.no_publisher);
         }
         publisherTextView.setText(publisher);
-
+*/
         TextView titleTextView = (TextView) bookListView.findViewById(R.id.title_text_view);
         titleTextView.setText(currentBook.getTitle());
         TextView authorsTextView = (TextView) bookListView.findViewById(R.id.authors_text_view);
