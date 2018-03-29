@@ -69,6 +69,37 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void getSearchQuery() {
+        EditText searchEditText = (EditText) findViewById(R.id.search_query);
+
+        searchQuery = searchEditText.getText().toString();
+
+        if (isConnected) {
+            BookAsyncTask task = new BookAsyncTask();
+            task.execute();
+        } else {
+            mAdapter.clear();
+            emptyStateTextView.setText(R.string.no_internet_connection);
+        }
+
+        hideKeyboard(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        getSearchQuery();
+    }
+
+    public void hideKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (activity.getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getApplicationWindowToken(), 0);
+        }
+    }
+
     private class BookAsyncTask extends AsyncTask<Void, Void, List<Book>> {
 
         @Override
@@ -93,36 +124,6 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 emptyStateTextView.setText(R.string.no_books_found);
             }
-        }
-    }
-
-    private void getSearchQuery() {
-        EditText searchEditText = (EditText) findViewById(R.id.search_query);
-
-        searchQuery = searchEditText.getText().toString();
-
-        if (isConnected) {
-            BookAsyncTask task = new BookAsyncTask();
-            task.execute();
-        } else {
-            emptyStateTextView.setText(R.string.no_internet_connection);
-        }
-
-        hideKeyboard(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        getSearchQuery();
-    }
-
-    public void hideKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (activity.getCurrentFocus() != null) {
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getApplicationWindowToken(), 0);
         }
     }
 

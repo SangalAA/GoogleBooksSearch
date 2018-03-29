@@ -32,7 +32,7 @@ public class QueryUtils {
     private QueryUtils() {
     }
 
-    private static List<Book> extractBooks (String jsonResponse) {
+    private static List<Book> extractBooks(String jsonResponse) {
         if (TextUtils.isEmpty(jsonResponse)) {
             return null;
         }
@@ -76,7 +76,7 @@ public class QueryUtils {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, "JSONException", e);
         }
 
         return books;

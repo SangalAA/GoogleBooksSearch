@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,48 @@ import java.util.List;
 
 public class BookAdapter extends ArrayAdapter<Book> {
 
+    private static final String LOG_TAG = BookAdapter.class.getName();
 
     public BookAdapter(@NonNull Context context, @NonNull List<Book> objects) {
         super(context, 0, objects);
+    }
+
+    private static String formatAuthors(List<String> authors) {
+        StringBuilder output = new StringBuilder();
+        if (authors.isEmpty()) {
+            return output.toString();
+        }
+        for (int i = 0; i < authors.size(); i++) {
+            if (i == authors.size() - 1) {
+                output.append(authors.get(i));
+            } else {
+                output.append(authors.get(i));
+                output.append(", ");
+            }
+        }
+        return output.toString();
+    }
+
+    private static String formatPublishedDate(String publishedDate) {
+        if (publishedDate.length() <= 4) {
+            return publishedDate;
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat year = new SimpleDateFormat("yyyy");
+
+        String yearString = "";
+        Date date = null;
+        try {
+            date = dateFormat.parse(publishedDate);
+            yearString = year.format(date);
+        } catch (ParseException e) {
+            Log.e(LOG_TAG, "Error parsing date", e);
+        } catch (NullPointerException npe) {
+            Log.e(LOG_TAG, "SimpleDateFormat tried to format null", npe);
+        }
+
+        return yearString;
     }
 
     @NonNull
@@ -65,44 +105,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
         dateTextView.setText(formatPublishedDate(currentBook.getPublishedDate()));
 
         return bookListView;
-    }
-
-    private static String formatAuthors(List<String> authors) {
-        StringBuilder output = new StringBuilder();
-        if (authors.isEmpty()) {
-            return output.toString();
-        }
-        for (int i = 0; i < authors.size(); i++) {
-            if (i == authors.size() - 1) {
-                output.append(authors.get(i));
-            } else {
-                output.append(authors.get(i));
-                output.append(", ");
-            }
-        }
-        return output.toString();
-    }
-
-    private static String formatPublishedDate(String publishedDate) {
-        if (publishedDate.length() <= 4) {
-            return publishedDate;
-        }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat year = new SimpleDateFormat("yyyy");
-
-        String yearString = "";
-        Date date = null;
-        try {
-            date = dateFormat.parse(publishedDate);
-            yearString = year.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-        }
-
-        return yearString;
     }
 
 }
