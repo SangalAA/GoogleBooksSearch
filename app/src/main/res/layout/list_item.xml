@@ -35,17 +35,7 @@
             android:maxLines="1"
             android:textSize="16sp"
             tools:text="BOOK TITLE" />
-<!--
-        <TextView
-            android:id="@+id/publisher_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-regular"
-            android:maxLines="1"
-            android:textSize="14sp"
-            tools:text="Publisher" />
--->
+
         <TextView
             android:id="@+id/authors_text_view"
             android:layout_width="wrap_content"

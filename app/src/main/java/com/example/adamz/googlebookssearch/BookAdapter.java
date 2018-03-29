@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,14 +49,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         ImageView thumbnailImageView = (ImageView) bookListView.findViewById(R.id.book_thumbnail);
         // Using Glide library to lazy load thumbnail images
         Glide.with(getContext()).load(currentBook.getThumbnailUrl()).into(thumbnailImageView);
-/*
-        TextView publisherTextView = (TextView) bookListView.findViewById(R.id.publisher_text_view);
-        String publisher = currentBook.getPublisher();
-        if (publisher.equals("")) {
-            publisher = getContext().getResources().getString(R.string.no_publisher);
-        }
-        publisherTextView.setText(publisher);
-*/
+
         TextView titleTextView = (TextView) bookListView.findViewById(R.id.title_text_view);
         titleTextView.setText(currentBook.getTitle());
         TextView authorsTextView = (TextView) bookListView.findViewById(R.id.authors_text_view);
@@ -66,7 +62,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
 
         TextView dateTextView = (TextView) bookListView.findViewById(R.id.date_text_view);
-        dateTextView.setText(currentBook.getPublishedDate());
+        dateTextView.setText(formatPublishedDate(currentBook.getPublishedDate()));
 
         return bookListView;
     }
@@ -76,11 +72,37 @@ public class BookAdapter extends ArrayAdapter<Book> {
         if (authors.isEmpty()) {
             return output.toString();
         }
-        for (String author : authors) {
-            output.append(author);
-            output.append(","); //
+        for (int i = 0; i < authors.size(); i++) {
+            if (i == authors.size() - 1) {
+                output.append(authors.get(i));
+            } else {
+                output.append(authors.get(i));
+                output.append(", ");
+            }
         }
         return output.toString();
+    }
+
+    private static String formatPublishedDate(String publishedDate) {
+        if (publishedDate.length() <= 4) {
+            return publishedDate;
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat year = new SimpleDateFormat("yyyy");
+
+        String yearString = "";
+        Date date = null;
+        try {
+            date = dateFormat.parse(publishedDate);
+            yearString = year.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
+
+        return yearString;
     }
 
 }

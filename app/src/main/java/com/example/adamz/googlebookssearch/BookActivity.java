@@ -3,6 +3,8 @@ package com.example.adamz.googlebookssearch;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +28,11 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
     private String searchQuery;
     private List<Book> books = new ArrayList<>();
     private BookAdapter mAdapter;
+    private boolean isConnected = true;
 
     private LinearLayout mProgressBarWrapper;
     private Button searchButton;
+    private TextView emptyStateTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,9 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
         ListView bookListView = (ListView) findViewById(R.id.book_list_view);
 
         bookListView.setAdapter(mAdapter);
+
+        emptyStateTextView = (TextView) findViewById(R.id.empty_state_text_view);
+        bookListView.setEmptyView(emptyStateTextView);
 
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,6 +90,8 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
 
             if (books != null && !books.isEmpty()) {
                 mAdapter.addAll(books);
+            } else {
+                emptyStateTextView.setText(R.string.no_books_found);
             }
         }
     }
@@ -91,14 +101,21 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
 
         searchQuery = searchEditText.getText().toString();
 
-        BookAsyncTask task = new BookAsyncTask();
-        task.execute();
+        if (isConnected) {
+            BookAsyncTask task = new BookAsyncTask();
+            task.execute();
+        } else {
+            emptyStateTextView.setText(R.string.no_internet_connection);
+        }
 
         hideKeyboard(this);
     }
 
     @Override
     public void onClick(View v) {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         getSearchQuery();
     }
 
