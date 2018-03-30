@@ -15,7 +15,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by adamz on 26.3.2018.
@@ -32,12 +31,12 @@ public class QueryUtils {
     private QueryUtils() {
     }
 
-    private static List<Book> extractBooks(String jsonResponse) {
+    private static ArrayList<Book> extractBooks(String jsonResponse) {
         if (TextUtils.isEmpty(jsonResponse)) {
             return null;
         }
 
-        List<Book> books = new ArrayList<>();
+        ArrayList<Book> books = new ArrayList<>();
 
         try {
             JSONObject root = new JSONObject(jsonResponse);
@@ -55,7 +54,7 @@ public class QueryUtils {
                     publisher = volumeInfo.getString("publisher");
                 }
 
-                List<String> authors = new ArrayList<>();
+                ArrayList<String> authors = new ArrayList<>();
                 if (volumeInfo.has("authors")) {
                     JSONArray authorsArray = volumeInfo.getJSONArray("authors");
                     for (int j = 0; j < authorsArray.length(); j++) {
@@ -157,7 +156,7 @@ public class QueryUtils {
         return output.toString();
     }
 
-    public static List<Book> fetchBookData(String query, int maxResults) {
+    public static ArrayList<Book> fetchBookData(String query, int maxResults) {
         URL url = createUrl(query, maxResults);
 
         String jsonResponse = "";
@@ -167,7 +166,7 @@ public class QueryUtils {
             Log.e(LOG_TAG, "Error while making http request", e);
         }
 
-        List<Book> books = extractBooks(jsonResponse);
+        ArrayList<Book> books = extractBooks(jsonResponse);
 
         return books;
     }

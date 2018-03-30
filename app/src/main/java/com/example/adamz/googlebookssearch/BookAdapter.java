@@ -1,8 +1,6 @@
 package com.example.adamz.googlebookssearch;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -15,12 +13,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -94,7 +89,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         titleTextView.setText(currentBook.getTitle());
         TextView authorsTextView = (TextView) bookListView.findViewById(R.id.authors_text_view);
 
-        List<String> authors = currentBook.getAuthors();
+        ArrayList<String> authors = currentBook.getAuthors();
         if (authors.isEmpty()) {
             authorsTextView.setText(R.string.no_authors);
         } else {

@@ -1,15 +1,15 @@
 package com.example.adamz.googlebookssearch;
 
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -17,19 +17,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class BookActivity extends AppCompatActivity implements View.OnClickListener {
+public class BookActivity extends AppCompatActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<ArrayList<Book>> {
 
+    private static final int BOOK_LOADER_ID = 1;
     private String searchQuery;
-    private List<Book> books = new ArrayList<>();
+    private ArrayList<Book> books = new ArrayList<>();
     private BookAdapter mAdapter;
     private boolean isConnected = true;
-
     private LinearLayout mProgressBarWrapper;
     private Button searchButton;
     private TextView emptyStateTextView;
@@ -54,6 +52,16 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
         emptyStateTextView = (TextView) findViewById(R.id.empty_state_text_view);
         bookListView.setEmptyView(emptyStateTextView);
 
+        if (savedInstanceState != null) {
+            this.books = savedInstanceState.getParcelableArrayList("books");
+            if (books != null && !books.isEmpty()) {
+                mAdapter.addAll(books);
+            }
+            EditText searchEditText = (EditText) findViewById(R.id.search_query);
+            searchEditText.setText(savedInstanceState.getString("searchQuery"));
+            hideKeyboard(this);
+        }
+
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -69,20 +77,11 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void getSearchQuery() {
-        EditText searchEditText = (EditText) findViewById(R.id.search_query);
-
-        searchQuery = searchEditText.getText().toString();
-
-        if (isConnected) {
-            BookAsyncTask task = new BookAsyncTask();
-            task.execute();
-        } else {
-            mAdapter.clear();
-            emptyStateTextView.setText(R.string.no_internet_connection);
-        }
-
-        hideKeyboard(this);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("searchQuery", searchQuery);
+        outState.putParcelableArrayList("books", books);
     }
 
     @Override
@@ -93,6 +92,27 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
         getSearchQuery();
     }
 
+    private void getSearchQuery() {
+        EditText searchEditText = (EditText) findViewById(R.id.search_query);
+
+        searchQuery = searchEditText.getText().toString();
+
+        if (isConnected) {
+            LoaderManager mLoaderManager = getLoaderManager();
+            if (mLoaderManager.getLoader(1) == null) {
+                mLoaderManager.initLoader(BOOK_LOADER_ID, null, this);
+            } else {
+                mLoaderManager.restartLoader(BOOK_LOADER_ID, null, this);
+            }
+
+        } else {
+            mAdapter.clear();
+            emptyStateTextView.setText(R.string.no_internet_connection);
+        }
+
+        hideKeyboard(this);
+    }
+
     public void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (activity.getCurrentFocus() != null) {
@@ -100,32 +120,28 @@ public class BookActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private class BookAsyncTask extends AsyncTask<Void, Void, List<Book>> {
+    @Override
+    public Loader<ArrayList<Book>> onCreateLoader(int id, Bundle args) {
+        mProgressBarWrapper.setVisibility(View.VISIBLE);
+        return new BookLoader(this, searchQuery);
+    }
 
-        @Override
-        protected void onPreExecute() {
-            mProgressBarWrapper.setVisibility(View.VISIBLE);
-        }
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Book>> loader, ArrayList<Book> books) {
+        mAdapter.clear();
 
-        @Override
-        protected List<Book> doInBackground(Void... voids) {
-            List<Book> result = QueryUtils.fetchBookData(searchQuery, 30);
-            return result;
-        }
+        mProgressBarWrapper.setVisibility(View.GONE);
 
-        @Override
-        protected void onPostExecute(List<Book> books) {
-            mAdapter.clear();
-
-            mProgressBarWrapper.setVisibility(View.GONE);
-
-            if (books != null && !books.isEmpty()) {
-                mAdapter.addAll(books);
-            } else {
-                emptyStateTextView.setText(R.string.no_books_found);
-            }
+        if (books != null && !books.isEmpty()) {
+            mAdapter.addAll(books);
+            this.books = books;
+        } else {
+            emptyStateTextView.setText(R.string.no_books_found);
         }
     }
 
-
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Book>> loader) {
+        mAdapter.clear();
+    }
 }
