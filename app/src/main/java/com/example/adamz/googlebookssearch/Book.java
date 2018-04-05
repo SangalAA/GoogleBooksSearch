@@ -12,15 +12,13 @@ import java.util.ArrayList;
 public class Book implements Parcelable {
     private String mTitle;
     private ArrayList<String> mAuthors;
-    private String mPublisher;
     private String mPublishedDate;
     private String mThumbnailUrl;
     private String mUrl;
 
-    public Book(String mTitle, ArrayList<String> mAuthors, String mPublisher, String mPublishedDate, String mThumbnailUrl, String mUrl) {
+    public Book(String mTitle, ArrayList<String> mAuthors, String mPublishedDate, String mThumbnailUrl, String mUrl) {
         this.mTitle = mTitle;
         this.mAuthors = mAuthors;
-        this.mPublisher = mPublisher;
         this.mPublishedDate = mPublishedDate;
         this.mThumbnailUrl = mThumbnailUrl;
         this.mUrl = mUrl;
@@ -32,10 +30,6 @@ public class Book implements Parcelable {
 
     public ArrayList<String> getAuthors() {
         return mAuthors;
-    }
-
-    public String getPublisher() {
-        return mPublisher;
     }
 
     public String getPublishedDate() {
@@ -58,7 +52,6 @@ public class Book implements Parcelable {
         } else {
             mAuthors = null;
         }
-        mPublisher = in.readString();
         mPublishedDate = in.readString();
         mThumbnailUrl = in.readString();
         mUrl = in.readString();
@@ -78,7 +71,6 @@ public class Book implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(mAuthors);
         }
-        dest.writeString(mPublisher);
         dest.writeString(mPublishedDate);
         dest.writeString(mThumbnailUrl);
         dest.writeString(mUrl);

@@ -49,11 +49,6 @@ public class QueryUtils {
                 JSONObject volumeInfo = book.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
 
-                String publisher = "";
-                if (volumeInfo.has("publisher")) {
-                    publisher = volumeInfo.getString("publisher");
-                }
-
                 ArrayList<String> authors = new ArrayList<>();
                 if (volumeInfo.has("authors")) {
                     JSONArray authorsArray = volumeInfo.getJSONArray("authors");
@@ -62,16 +57,13 @@ public class QueryUtils {
                     }
                 }
 
-                // authors
                 String publishedDate = volumeInfo.getString("publishedDate");
-
                 String url = volumeInfo.getString("canonicalVolumeLink");
 
                 JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-
                 String thumbnailUrl = imageLinks.getString("smallThumbnail"); //osetrit
 
-                books.add(new Book(title, authors, publisher, publishedDate, thumbnailUrl, url));
+                books.add(new Book(title, authors, publishedDate, thumbnailUrl, url));
             }
 
         } catch (JSONException e) {
